@@ -57,26 +57,11 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contacts.removeContact(id);
-
-    if (!result) {
-      throw createError(404, `Contact with id=${id} not found`);
-    }
-
-    res.json({ message: "contact deleted" });
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.put("/:id", async (req, res, next) => {
   try {
     const { error } = contactShema.validate(req.body);
     if (error) {
-      throw createError(400, "missing fields");
+      throw createError(400, error.message);
     }
     const { id } = req.params;
     const { name, email, phone } = req.body;
@@ -87,6 +72,21 @@ router.put("/:id", async (req, res, next) => {
     }
 
     res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contacts.removeContact(id);
+
+    if (!result) {
+      throw createError(404, "Not found");
+    }
+
+    res.json({ message: "Contact deleted" });
   } catch (error) {
     next(error);
   }
