@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 
 const singup = async (req, res, next) => {
   const { email, password } = req.body;
+
   const result = await User.findOne({ email });
   if (result) {
     throw createError(409, "Email already exist ");
@@ -14,6 +15,7 @@ const singup = async (req, res, next) => {
   res.status(201).json({
     user: {
       email,
+      subscription: "starter",
     },
   });
 };

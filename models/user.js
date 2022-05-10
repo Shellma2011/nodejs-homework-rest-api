@@ -25,7 +25,6 @@ const userSchema = Schema(
     token: {
       type: String,
       default: null,
-      //   required: true,
     },
   },
   { versionKey: false, timestamps: true }
@@ -34,11 +33,17 @@ const userSchema = Schema(
 const signupJoiSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
+  subscription: Joi.string(),
+});
+
+const updateSubscriptionJoiSchema = Joi.object({
+  subscription: Joi.string().required(),
 });
 
 const schemas = {
   signup: signupJoiSchema,
   login: signupJoiSchema,
+  updateSubscription: updateSubscriptionJoiSchema,
 };
 
 const User = model("user", userSchema);
